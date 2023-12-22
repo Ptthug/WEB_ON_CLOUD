@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quan ly sinh vien</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+        * {
+        margin: 0;
+        padding: 0;
+        font: inherit;
+        }
+        .panel-primary {
+        padding: 0 20px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 2px 2px #999;
+        }
+
+        .panel__heading {
+        background-color: rgb(50, 131, 223);
+        color: #fff;
+        padding: 12px 20px;
+        width: 100vw;
+        position: relative;
+        left: calc(-50vw + 50%);
+        margin-top: 90px;
+        }
+        .panel__form label {
+        width: 100%;
+        padding: 10px 0;
+        }
+
+        .panel__form input {
+        width: 100%;
+        border-radius: 4px;
+        height: 30px;
+        padding: 0 8px;
+        border: 1px solid #999;
+        box-shadow: 1px 1px #999;
+        }
+
+        .btn__success {
+        padding: 8px 16px;
+        background-color: green;
+        color: #fff;
+        margin: 20px 0;
+        }
+
+        .table__primary thead tr th,
+        #dataList tr td{
+        padding: 10px 20px;
+        text-align: center;
+        line-height: 37px;
+        }
+        .btn {
+        padding: 8px 16px;
+        color: #fff;
+        cursor: pointer;
+        }
+        .btn-warning {
+        background-color: rgba(217, 135, 2, 0.808);
+        }
+        .btn-danger {
+        background-color: rgb(231, 55, 6);
+        }
+
+        .sub-panel {
+        padding: 0 20px;
+        }
+
+        html {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            scroll-behavior: smooth;
+            background-image: url(/khoadientu/img/parallax3.jpg);
+
+        }
+        .sub-header{
+            height: 80px;
+            width: 100vw;
+            background-color: #fff;
+            display: flex;
+            padding: 0 190px;
+            justify-content: start;
+            align-items: center;
+            position: fixed;
+            z-index: 999;
+            box-shadow: 0 8px 12px -10px rgba(0,0,0,0.75);
+        }
+        .sub-header__logo{
+            object-fit: cover;
+            height: 56px;
+        }
+        .sub-header__navlist{
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        .sub-header__icon{
+            transform: translateX(20px);
+            line-height: 30px;
+            margin-right: 30px;
+        }
+
+        .sub-header__nav{
+            display: flex;
+            align-items: center;
+            position: relative;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            cursor: pointer;
+        }
+        .sub-header__nav::after{
+            content: "";
+            position: absolute;
+            bottom: 0;
+            height: 1px;
+            width: 100%;
+            background-color: #000;
+            animation: hoverShow ease-in-out 0.5s;
+            display: none;
+        }
+        .sub-header__nav:hover::after {
+            display: block;
+        }
+        .sub-header__nav a{
+            font-size: 14px;
+            font-weight: 900;
+            color: #535353;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+        .sub-header__nav svg {
+            opacity: 0.3;
+        }
+
+    </style>
+</head>
+<body onload="load()"> 
+    <header class="sub-header">
+        <img src="../css/img/logo-ngang.png" alt="" class="sub-header__logo">
+        <div class="sub-header__navlist">
+            <div class="sub-header__nav">
+                <i class="sub-header__icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9916 4.1712L12 4.16686L12.0087 4.17139L16.4622 6.84345L18 7.76998V18.8C18 19.3931 17.9984 19.7176 17.9794 19.9508L17.9771 19.9771L17.9507 19.9794C17.7176 19.9985 17.3931 20 16.8 20H7.2C6.60695 20 6.28244 19.9985 6.04927 19.9794L6.0229 19.9771L6.02061 19.9508C6.00156 19.7176 6 19.3931 6 18.8V7.77L7.53217 6.84688L11.9916 4.1712ZM6.50169 5.13278L1.48553 8.14248C1.01195 8.42663 0.858388 9.04089 1.14254 9.51447C1.42668 9.98805 2.04094 10.1416 2.51452 9.85746L4 8.96618V18.8C4 19.9202 4 20.4802 4.21799 20.908C4.40973 21.2844 4.71569 21.5903 5.09202 21.7821C5.51984 22 6.0799 22 7.2 22H16.8C17.9201 22 18.4802 22 18.908 21.7821C19.2843 21.5903 19.5903 21.2844 19.782 20.908C20 20.4802 20 19.9202 20 18.8V8.96614L21.4855 9.85746C21.9591 10.1416 22.5734 9.98805 22.8575 9.51447C23.1417 9.04089 22.9881 8.42663 22.5145 8.14248L17.4926 5.12932L13.6514 2.81504C13.3721 2.64678 13.1578 2.51766 12.9762 2.42057C12.9338 2.39686 12.8908 2.3748 12.8472 2.35441C12.696 2.28065 12.565 2.23155 12.4304 2.20189C12.1469 2.13941 11.8531 2.13941 11.5696 2.20189C11.4346 2.23163 11.3033 2.28091 11.1516 2.35499C11.1088 2.37505 11.0666 2.39671 11.0249 2.41996C10.8431 2.51712 10.6285 2.64643 10.3486 2.81504L6.50169 5.13278Z" fill="currentColor"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13 20V16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16V20H13ZM12 13C10.3431 13 9 14.3431 9 16V22H15V16C15 14.3431 13.6569 13 12 13Z" fill="currentColor"/>
+                    </svg>
+                </i>
+                <a href="">Trang chủ</a>
+            </div>
+            <div class="sub-header__nav">
+                <a href="">Trắc nghiệm</a>
+            </div>
+        </div>
+    </header>
+    <div class="panel panel-primary">
+        <div class="panel__heading">
+            Nhập thông tin sinh viên
+        </div>
+        <div class="panel__body">
+            <div class="panel__form">
+                <label for="fullname">Họ và tên</label>
+                <input type="text" name="fullname" id="fullname" class="form__control">
+            </div>
+            <div class="panel__form">
+                <label for="age">Tuổi</label>
+                <input type="text" name="age" id="age" class="form__control">
+            </div>
+            <div class="panel__form">
+                <label for="address">Địa chỉ</label>
+                <input type="text" name="address" id="address" class="form__control">
+            </div>
+            <div class="panel__form">
+                <label for="number">Điểm</label>
+                <input type="text" name="number" id="number" class="form__control">
+            </div>
+            <button onclick="callAPI(document.getElementById('fullname').value, document.getElementById('age').value, document.getElementById('address').value, document.getElementById('number').value)" class="btn btn__success" id="btn__upload">Thêm</button>
+            <button onclick="addStudent()" class="btn btn__success" id="btn__upload">Lấy thông tin</button>
+        </div>
+    </div>
+    <div class="sub-panel">
+        <div class="panel__heading">
+            Thông tin sinh viên
+        </div>
+        <div class="panel__body">
+            <table class="table table__primary">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Họ tên</th>
+                        <th>Tuổi</th>
+                        <th>Địa chỉ</th>
+                        <th>Điểm</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody id="dataList">   
+                </tbody>
+            </table>
+            <div class="panel__form">
+                <label for="filter">Lọc theo tên và địa chỉ:</label>
+                <input type="text" name="filter" id="filter" class="form__control">
+                <button onclick="filterData()" class="btn btn__success">Lọc</button>
+            </div>               
+        </div>
+    </div>
+    <script>
+        var callAPI = (fullname,age,address,number)=>{
+             var myHeaders = new Headers();
+             myHeaders.append("Content-Type", "application/json");
+             var raw = JSON.stringify({"fullname":fullname,"age":age,"address":address,"number":number});
+             var requestOptions = {
+                 method: 'POST',
+                 headers: myHeaders,
+                 body: raw,
+                 redirect: 'follow'
+             };
+             fetch("https://8e3ays44ab.execute-api.ap-southeast-2.amazonaws.com/dev", requestOptions)
+             .then(response => response.text())
+             .then(result => alert(JSON.parse(result).message))
+             .catch(error => console.log('error', error));
+         }
+        function load() {
+            alert('Chào mừng đến với Quản lý sinh viên')
+            var defaults = document.getElementById('fullname')
+            defaults.value = 'Nguyễn Đức Trung'
+            document.getElementById('age').value = 21
+            document.getElementById('address').value = 'Hà Nam'
+
+            var storedStudents = localStorage.getItem('students');
+            if (storedStudents) {
+                students = JSON.parse(storedStudents);
+                displayStudents();
+            }
+        }
+        var students = [];
+        var dataListTag = document.getElementById('dataList');
+
+        function addStudent() {
+            var fullName = document.getElementById('fullname').value;
+            var age = document.getElementById('age').value;
+            var address = document.getElementById('address').value;
+            var numberInput = document.getElementById('number');
+            var number = parseFloat(numberInput.value.trim());
+            if (fullName === '' || age === '' || address === '' || isNaN(number) || number > 10 || numberInput.value.trim() === '') {
+                Toastify({
+                    text: 'Dữ liệu không hợp lệ',
+                    duration: 5000,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #e74c3c, #c0392b)'
+                }).showToast();
+                return;
+            }
+        var student = {
+            'fullname': fullName,
+            'age': age,
+            'address': address,
+            'number': number
+        };
+        students.push(student);
+        console.log(students);
+        localStorage.setItem('students', JSON.stringify(students));
+
+        dataListTag.innerHTML += `
+        <tr>
+            <td>${students.length}</td>
+            <td>${fullName}</td>
+            <td>${age}</td>
+            <td>${address}</td>
+            <td>${number}</td>
+            <td><button class="btn btn-warning" onclick="edit(${students.length - 1})">Sửa</button></td>
+            <td><button class="btn btn-danger" onclick="deleteStudent(${students.length - 1})">Xóa</button></td>
+        </tr>
+        `;
+        Toastify({
+            text: 'Thêm sinh viên thành công',
+            duration: 5000,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)'
+        }).showToast();
+        }
+        function edit(index) {
+            var editStudent = students[index];
+            var fullName = editStudent.fullname;
+            var age = editStudent.age;
+            var address = editStudent.address;
+            var number = editStudent.number;
+            document.getElementById('fullname').value = fullName;
+            document.getElementById('age').value = age;
+            document.getElementById('address').value = address;
+            document.getElementById('number').value = number;
+
+            document.getElementById('btn__upload').innerHTML = 'Cập nhật';
+
+            var rowToUpdate = dataListTag.rows[index];
+            rowToUpdate.innerHTML = `
+            <td>${index + 1}</td>
+            <td><input type="text" id="edit-fullname" value="${fullName}"></td>
+            <td><input type="text" id="edit-age" value="${age}"></td>
+            <td><input type="text" id="edit-address" value="${address}"></td>
+            <td><input type="text" id="edit-number" value="${number}" oninput="validateInput(this)"></td>
+            <td><button class="btn btn-warning" onclick="save(${index})">Lưu</button></td>
+            <td><button class="btn btn-danger" onclick="deleteStudent(${index})">Xóa</button></td>
+            `;
+        }
+        function validateInput(input) {
+            var number = parseFloat(input.value);
+            if (number > 10) {
+                input.value = '';
+                Toastify({
+                    text: 'Giá trị điểm không được quá 10',
+                    duration: 5000,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #e74c3c, #c0392b)'
+                }).showToast();
+            }
+        }
+        function save(index) {
+            var updatedFullName = document.getElementById('edit-fullname').value;
+            var updatedAge = document.getElementById('edit-age').value;
+            var updatedAddress = document.getElementById('edit-address').value;
+            var updatedNumber = document.getElementById('edit-number').value;
+
+            var updatedStudent = {
+                'fullname': updatedFullName,
+                'age': updatedAge,
+                'address': updatedAddress,
+                'number': updatedNumber
+            };
+            students[index] = updatedStudent;
+            localStorage.setItem('students', JSON.stringify(students));
+
+            var rowToUpdate = dataListTag.rows[index];
+            rowToUpdate.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${updatedFullName}</td>
+                <td>${updatedAge}</td>
+                <td>${updatedAddress}</td>
+                <td>${updatedNumber}</td>
+                
+                <td><button class="btn btn-warning" onclick="edit(${index})">Sửa</button></td>
+                <td><button class="btn btn-danger" onclick="deleteStudent(${index})">Xóa</button></td>
+            `;
+            document.getElementById('btn__upload').innerHTML = 'Thêm';
+            document.getElementById('fullname').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('number').value = '';
+            Toastify({
+                text: 'Sửa thông tin sinh viên thành công',
+                duration: 5000,
+                gravity: 'top',
+                position: 'right',
+                backgroundColor: 'linear-gradient(to right, #ffb347, #ffcc33)'
+            }).showToast();
+        }
+        function displayStudents() {
+            var dataListTag = document.getElementById('dataList');
+            dataListTag.innerHTML = ''; 
+            for (var i = 0; i < students.length; i++) {
+                var student = students[i];
+                var fullName = student.fullname;
+                var age = student.age;
+                var address = student.address;
+                var number = student.number;
+
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${i + 1}</td>
+                <td>${fullName}</td>
+                <td>${age}</td>
+                <td>${address}</td>
+                <td>${number}</td>
+                <td><button class="btn btn-warning" onclick='edit(${i})'>Sửa</button></td>
+                <td><button class="btn btn-danger" onclick='deleteStudent(${i})'>Xóa</button></td>
+            `;
+                dataListTag.appendChild(row);
+            }
+        }
+        function deleteStudent(index) {
+            students.splice(index, 1);
+            localStorage.setItem('students', JSON.stringify(students));
+            displayStudents();
+
+            Toastify({
+                text: 'Xóa sinh viên thành công',
+                duration: 5000,
+                gravity: 'top',
+                position: 'right',
+                backgroundColor: 'linear-gradient(to right, #ff0033, #cc0066)'
+            }).showToast();
+        }
+        displayStudents();
+        function filterData() {
+            var filterValue = document.getElementById("filter").value.toLowerCase();
+            var dataList = document.getElementById("dataList");
+            var rows = dataList.getElementsByTagName("tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                var address = cells[3].textContent.toLowerCase();
+                var name = cells[1].textContent.toLowerCase();
+                var number = cells[2].textContent.toLowerCase();
+                if (name.indexOf(filterValue) > -1 || address.indexOf(filterValue) > -1 || number.indexOf(filterValue) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+                console.log(number);
+            }
+            Toastify({
+                text: 'Lọc thông tin sinh viên thành công',
+                duration: 5000,
+                gravity: 'top',
+                position: 'right',
+                backgroundColor: 'linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)'
+            }).showToast();
+        }
+    </script>
+</body>
+</html>
